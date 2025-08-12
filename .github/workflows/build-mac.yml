@@ -1,23 +1,27 @@
-name: Build Mac App
+name: Release Mac App
 
 on:
   push:
-    branches: [main]
     tags: ['v*']
-  pull_request:
-    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-mac:
+  build-and-release:
     runs-on: macos-latest
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Get version from package.json
+      id: package-version
+      run: |
+        VERSION=$(cat package.json | jq -r '.version')
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Version: $VERSION"
 
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
@@ -62,33 +66,12 @@ jobs:
         TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
 
-    - name: Upload Mac app bundle
-      uses: actions/upload-artifact@v4
-      with:
-        name: lofi-player-mac-${{ github.sha }}
-        path: |
-          src-tauri/target/release/bundle/dmg/*.dmg
-          src-tauri/target/release/bundle/macos/*.app
-        retention-days: 30
-
-  release:
-    needs: build-mac
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    
-    steps:
-    - name: Download Mac artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: lofi-player-mac-${{ github.sha }}
-        path: ./artifacts
-
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
+        name: "Lofi Player v${{ steps.package-version.outputs.version }}"
         files: |
-          artifacts/**/*.dmg
-          artifacts/**/*.app
+          src-tauri/target/release/bundle/dmg/*.dmg
         generate_release_notes: true
         draft: false
         prerelease: false
