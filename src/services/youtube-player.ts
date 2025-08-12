@@ -165,19 +165,10 @@ class YouTubePlayerService {
    */
   async loadVideo(videoId: string): Promise<void> {
     if (!this.player || !this.isAPIReady) {
-      await new Promise<void>((resolve) => {
-        const checkReady = () => {
-          if (this.player && this.isAPIReady) {
-            resolve();
-          } else {
-            setTimeout(checkReady, 50);
-          }
-        };
-        checkReady();
-      });
+      return;
     }
 
-    this.player!.loadVideoById(videoId);
+    this.player.loadVideoById(videoId);
   }
 
   play(): void {
