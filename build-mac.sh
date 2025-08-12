@@ -11,13 +11,7 @@ echo "🏗️ Building frontend..."
 bun run build
 
 echo "🦀 Building Tauri app..."
-if command -v cargo-tauri &> /dev/null; then
-    cargo tauri build
-else
-    echo "Installing tauri CLI..."
-    cargo install tauri-cli@2.5.0
-    cargo tauri build
-fi
+bun run tauri build
 
 echo "✅ Build complete!"
 echo "📁 Built app can be found in src-tauri/target/release/bundle/"
