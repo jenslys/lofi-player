@@ -21,9 +21,6 @@
   align-items: center;
 }
 
-.track-display {
-  display: none;
-}
 .player-controls {
   display: flex;
   justify-content: center;
@@ -167,12 +164,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.loading-indicator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 20px;
-}
 
 .loading-spinner {
   width: 16px;

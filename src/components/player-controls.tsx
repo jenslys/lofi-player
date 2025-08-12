@@ -1,4 +1,3 @@
-import { memo } from 'react';
 
 const PLAY_ICON = (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -32,7 +31,7 @@ interface PlayerControlsProps {
   readonly onPrevious: () => void;
 }
 
-export const PlayerControls = memo(function PlayerControls({ isPlaying, isLoading, onPlayPause, onNext, onPrevious }: PlayerControlsProps) {
+export function PlayerControls({ isPlaying, isLoading, onPlayPause, onNext, onPrevious }: PlayerControlsProps) {
   return (
     <div className="player-controls">
       <button
@@ -69,5 +68,5 @@ export const PlayerControls = memo(function PlayerControls({ isPlaying, isLoadin
       </button>
     </div>
   );
-});
+}
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from "preact/hooks";
 import { invoke } from "@tauri-apps/api/core";
 import { AudioPlayer } from "./components/audio-player";
 

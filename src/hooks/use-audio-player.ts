@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useCallback } from 'react';
+import { useReducer, useEffect, useCallback } from 'preact/hooks';
 import { PlayerState, PlayerAction } from '../types/music';
 import { lofiTracks } from '../data/tracks';
 import { fisherYatesShuffle } from '../utils/shuffle';

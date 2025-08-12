@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect } from 'preact/hooks';
 import { useAudioPlayer } from '../hooks/use-audio-player';
 import { PlayerControls } from './player-controls';
-import { TrackDisplay } from './track-display';
 import { VolumeControl } from './volume-control';
 import { youtubePlayerService } from '../services/youtube-player';
 
@@ -11,7 +10,6 @@ import { youtubePlayerService } from '../services/youtube-player';
  */
 export function AudioPlayer() {
   const {
-    currentTrack,
     isPlaying,
     isLoading,
     error,
@@ -33,12 +31,6 @@ export function AudioPlayer() {
       <div id="youtube-player" style={{ display: 'none' }}></div>
       
       <div className="player-content">
-        <TrackDisplay 
-          track={currentTrack}
-          isPlaying={isPlaying}
-          isLoading={isLoading}
-        />
-        
         <PlayerControls
           isPlaying={isPlaying}
           isLoading={isLoading}

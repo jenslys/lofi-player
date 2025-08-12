@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import preact from "@preact/preset-vite";
 
 export default defineConfig(async () => ({
-  plugins: [react()],
+  plugins: [preact()],
 
   clearScreen: false,
   server: {
@@ -31,7 +31,7 @@ export default defineConfig(async () => ({
   },
   
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['preact', 'preact/hooks'],
     holdUntilCrawlEnd: false,
   },
 }));
