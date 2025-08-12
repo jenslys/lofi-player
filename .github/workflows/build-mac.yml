@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths: ['package.json']
 
+permissions:
+  contents: write
+  
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -55,6 +58,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create and push tag
       run: |
@@ -62,8 +67,6 @@ jobs:
         git config --local user.name "GitHub Action"
         git tag "v${{ needs.check-version.outputs.new-version }}"
         git push origin "v${{ needs.check-version.outputs.new-version }}"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
