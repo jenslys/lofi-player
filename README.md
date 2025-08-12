@@ -4,11 +4,6 @@ A macOS menu bar application for playing lofi music, built with Tauri + React + 
 
 This application demonstrates how to create a macOS menu bar app using Tauri with a clean, minimal interface that sits in your menu bar.
 
-## Demo
-
-See it in action:
-
-![Demo](./demo.gif)
 
 ## Prerequisites
 
