@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { AudioPlayer } from "./components/audio-player";
 
 import "./App.css";
+import "./components/audio-player.css";
 
 function App() {
   useEffect(() => {
@@ -10,8 +12,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Lofi Player</h1>
-      <p>Ready to play some chill beats...</p>
+      <AudioPlayer />
     </div>
   );
 }

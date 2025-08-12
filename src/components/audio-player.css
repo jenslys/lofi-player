@@ -1,0 +1,237 @@
+/* Apple-inspired minimal audio player */
+.audio-player {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1c1c1e;
+  border-radius: 12px;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.player-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Track Display - Minimal */
+.track-display {
+  display: none;
+}
+
+/* Player Controls */
+.player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.control-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.control-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.control-button:active {
+  transform: scale(0.98);
+  transition: all 0.1s ease;
+}
+
+.control-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.play-pause-button:disabled {
+  background: #007AFF;
+  opacity: 1;
+}
+
+.play-pause-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: #007AFF;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+  color: white;
+}
+
+.play-pause-button:hover {
+  background: #0056CC;
+  transform: scale(1.02);
+  box-shadow: 0 2px 12px rgba(0, 122, 255, 0.35);
+}
+
+.next-button, .previous-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+}
+
+/* Volume Control */
+.volume-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+
+.volume-icon {
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.volume-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  transform: scale(1.02);
+}
+
+.volume-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s ease;
+  pointer-events: all;
+  padding: 2px;
+}
+
+.volume-slider {
+  width: 60px;
+  height: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #007AFF;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #007AFF;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.volume-value {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  min-width: 16px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Loading States */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-top: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner.small {
+  width: 14px;
+  height: 14px;
+  border-width: 1.5px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error Message */
+.error-message {
+  background: rgba(255, 69, 58, 0.08);
+  border: 1px solid rgba(255, 69, 58, 0.15);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: rgba(255, 69, 58, 0.9);
+  font-size: 11px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Focus states for accessibility */
+.control-button:focus-visible {
+  outline: 2px solid #007AFF;
+  outline-offset: 2px;
+}
+
+.volume-slider:focus-visible {
+  outline: 2px solid #007AFF;
+  outline-offset: 2px;
+}
+
+/* Additional hover effects */
+.volume-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.volume-slider:hover::-moz-range-thumb {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
