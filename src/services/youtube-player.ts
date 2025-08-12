@@ -46,11 +46,14 @@ interface YouTubePlayer {
 
 type PlayerEventCallback = (event: 'ready' | 'playing' | 'paused' | 'ended' | 'error', data?: any) => void;
 
+/**
+ * Service for managing YouTube iframe player integration
+ * Handles API loading, player initialization, and event management
+ */
 class YouTubePlayerService {
   private player: YouTubePlayer | null = null;
   private isAPIReady = false;
   private callbacks: PlayerEventCallback[] = [];
-  private currentVideoId = '';
 
   constructor() {
     this.loadYouTubeAPI();
@@ -118,25 +121,45 @@ class YouTubePlayerService {
     });
   }
 
-  onPlayerEvent(callback: PlayerEventCallback): void {
+  /**
+   * Registers an event callback and returns cleanup function
+   * @param callback Function to handle player events
+   * @returns Cleanup function to remove the callback
+   */
+  onPlayerEvent(callback: PlayerEventCallback): () => void {
     this.callbacks.push(callback);
+    
+    return () => {
+      const index = this.callbacks.indexOf(callback);
+      if (index > -1) {
+        this.callbacks.splice(index, 1);
+      }
+    };
   }
 
   private notifyCallbacks(event: 'ready' | 'playing' | 'paused' | 'ended' | 'error', data?: any): void {
     this.callbacks.forEach(callback => callback(event, data));
   }
 
+  /**
+   * Loads a YouTube video by ID, waiting for player readiness
+   * @param videoId YouTube video identifier
+   */
   async loadVideo(videoId: string): Promise<void> {
-    return new Promise((resolve) => {
-      if (!this.player || !this.isAPIReady) {
-        setTimeout(() => this.loadVideo(videoId).then(resolve), 100);
-        return;
-      }
+    if (!this.player || !this.isAPIReady) {
+      await new Promise<void>((resolve) => {
+        const checkReady = () => {
+          if (this.player && this.isAPIReady) {
+            resolve();
+          } else {
+            setTimeout(checkReady, 50);
+          }
+        };
+        checkReady();
+      });
+    }
 
-      this.currentVideoId = videoId;
-      this.player.loadVideoById(videoId);
-      resolve();
-    });
+    this.player!.loadVideoById(videoId);
   }
 
   play(): void {

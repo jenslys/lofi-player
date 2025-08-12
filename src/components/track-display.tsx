@@ -7,7 +7,7 @@ interface TrackDisplayProps {
   isLoading: boolean;
 }
 
-export const TrackDisplay = memo(function TrackDisplay({ track, isPlaying, isLoading }: TrackDisplayProps) {
+export const TrackDisplay = memo(function TrackDisplay({ isLoading }: TrackDisplayProps) {
   return (
     <div className="track-display">
       {isLoading && (

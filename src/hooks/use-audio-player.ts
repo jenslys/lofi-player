@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useCallback } from 'react';
-import { PlayerState, PlayerAction, Track } from '../types/music';
+import { PlayerState, PlayerAction } from '../types/music';
 import { lofiTracks } from '../data/tracks';
 import { fisherYatesShuffle } from '../utils/shuffle';
 import { youtubePlayerService } from '../services/youtube-player';
@@ -15,6 +15,12 @@ const initialState: PlayerState = {
   error: null,
 };
 
+/**
+ * Manages audio player state transitions
+ * @param state Current player state
+ * @param action State change action
+ * @returns Updated player state
+ */
 function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
   switch (action.type) {
     case 'SET_TRACKS':
@@ -43,7 +49,6 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
 
     case 'NEXT_TRACK':
       const nextIndex = (state.currentIndex + 1) % state.queue.length;
-      saveCurrentIndex(nextIndex);
       return {
         ...state,
         currentIndex: nextIndex,
@@ -54,7 +59,6 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
 
     case 'PREVIOUS_TRACK':
       const prevIndex = state.currentIndex === 0 ? state.queue.length - 1 : state.currentIndex - 1;
-      saveCurrentIndex(prevIndex);
       return {
         ...state,
         currentIndex: prevIndex,
@@ -70,7 +74,6 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
       };
 
     case 'SET_VOLUME':
-      saveVolume(action.payload);
       return {
         ...state,
         volume: action.payload,
@@ -95,20 +98,21 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
   }
 }
 
+/**
+ * Custom hook for managing audio player state and YouTube integration
+ * @returns Player state and control functions
+ */
 export function useAudioPlayer() {
   const [state, dispatch] = useReducer(playerReducer, initialState);
 
-  // Initialize tracks on mount
   useEffect(() => {
     dispatch({ type: 'SET_TRACKS', payload: lofiTracks });
   }, []);
 
-  // Setup YouTube player event handlers
   useEffect(() => {
-    youtubePlayerService.onPlayerEvent((event, data) => {
+    const unsubscribe = youtubePlayerService.onPlayerEvent((event, data) => {
       switch (event) {
         case 'ready':
-          // Set the saved volume when player is ready
           youtubePlayerService.setVolume(state.volume);
           dispatch({ type: 'SET_LOADING', payload: false });
           break;
@@ -124,16 +128,25 @@ export function useAudioPlayer() {
           break;
         case 'error':
           console.error(`YouTube player error: ${data}`);
-          // Automatically skip to next track on error
           setTimeout(() => {
             dispatch({ type: 'NEXT_TRACK' });
           }, 1000);
           break;
       }
     });
-  }, []);
 
-  // Load new track when currentTrack changes
+    return unsubscribe;
+  }, [state.volume]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      saveCurrentIndex(state.currentIndex);
+      saveVolume(state.volume);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [state.currentIndex, state.volume]);
+
   useEffect(() => {
     if (state.currentTrack && youtubePlayerService.isReady()) {
       dispatch({ type: 'SET_LOADING', payload: true });

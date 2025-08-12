@@ -3,6 +3,10 @@ const STORAGE_KEYS = {
   CURRENT_INDEX: 'lofi-player-current-index',
 } as const;
 
+/**
+ * Persists volume setting to localStorage
+ * @param volume Volume level (0-100)
+ */
 export function saveVolume(volume: number): void {
   try {
     localStorage.setItem(STORAGE_KEYS.VOLUME, volume.toString());
@@ -11,6 +15,10 @@ export function saveVolume(volume: number): void {
   }
 }
 
+/**
+ * Loads volume setting from localStorage
+ * @returns Volume level (0-100), defaults to 50
+ */
 export function loadVolume(): number {
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.VOLUME);
@@ -23,9 +31,13 @@ export function loadVolume(): number {
   } catch (error) {
     console.warn('Failed to load volume from localStorage:', error);
   }
-  return 50; // Default volume
+  return 50;
 }
 
+/**
+ * Persists current track index to localStorage
+ * @param index Track queue index
+ */
 export function saveCurrentIndex(index: number): void {
   try {
     localStorage.setItem(STORAGE_KEYS.CURRENT_INDEX, index.toString());
@@ -34,6 +46,10 @@ export function saveCurrentIndex(index: number): void {
   }
 }
 
+/**
+ * Loads current track index from localStorage
+ * @returns Track queue index, defaults to 0
+ */
 export function loadCurrentIndex(): number {
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.CURRENT_INDEX);
@@ -46,5 +62,5 @@ export function loadCurrentIndex(): number {
   } catch (error) {
     console.warn('Failed to load current index from localStorage:', error);
   }
-  return 0; // Default to first track
+  return 0;
 }

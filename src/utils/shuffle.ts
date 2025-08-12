@@ -1,6 +1,7 @@
 /**
- * Fisher-Yates shuffle algorithm for unbiased random array shuffling
- * Time complexity: O(n), Space complexity: O(1)
+ * Shuffles an array using the Fisher-Yates algorithm
+ * @param array Array to shuffle
+ * @returns New shuffled array (original unchanged)
  */
 export function fisherYatesShuffle<T>(array: T[]): T[] {
   const shuffled = [...array];

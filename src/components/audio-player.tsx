@@ -5,6 +5,10 @@ import { TrackDisplay } from './track-display';
 import { VolumeControl } from './volume-control';
 import { youtubePlayerService } from '../services/youtube-player';
 
+/**
+ * Main audio player component that orchestrates playback controls and display
+ * @returns The complete audio player interface
+ */
 export function AudioPlayer() {
   const {
     currentTrack,
@@ -18,7 +22,6 @@ export function AudioPlayer() {
     setVolume,
   } = useAudioPlayer();
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       youtubePlayerService.cleanup();
@@ -27,7 +30,6 @@ export function AudioPlayer() {
 
   return (
     <div className="audio-player">
-      {/* Hidden YouTube iframe container */}
       <div id="youtube-player" style={{ display: 'none' }}></div>
       
       <div className="player-content">
