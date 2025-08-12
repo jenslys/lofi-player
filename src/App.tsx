@@ -14,7 +14,9 @@ function App() {
     
     setTimeout(() => {
       if (document.activeElement && document.activeElement !== document.body) {
-        (document.activeElement as HTMLElement).blur();
+        if ('blur' in document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
       }
     }, 100);
   }, []);

@@ -25,11 +25,11 @@ const NEXT_ICON = (
 );
 
 interface PlayerControlsProps {
-  isPlaying: boolean;
-  isLoading: boolean;
-  onPlayPause: () => void;
-  onNext: () => void;
-  onPrevious: () => void;
+  readonly isPlaying: boolean;
+  readonly isLoading: boolean;
+  readonly onPlayPause: () => void;
+  readonly onNext: () => void;
+  readonly onPrevious: () => void;
 }
 
 export const PlayerControls = memo(function PlayerControls({ isPlaying, isLoading, onPlayPause, onNext, onPrevious }: PlayerControlsProps) {

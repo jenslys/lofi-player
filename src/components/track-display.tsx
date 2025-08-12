@@ -2,9 +2,9 @@ import { memo } from 'react';
 import { Track } from '../types/music';
 
 interface TrackDisplayProps {
-  track: Track | null;
-  isPlaying: boolean;
-  isLoading: boolean;
+  readonly track: Track | null;
+  readonly isPlaying: boolean;
+  readonly isLoading: boolean;
 }
 
 export const TrackDisplay = memo(function TrackDisplay({ isLoading }: TrackDisplayProps) {

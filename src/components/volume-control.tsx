@@ -1,14 +1,16 @@
 import { memo, useCallback } from 'react';
 
 interface VolumeControlProps {
-  volume: number;
-  onVolumeChange: (volume: number) => void;
+  readonly volume: number;
+  readonly onVolumeChange: (volume: number) => void;
 }
 
 export const VolumeControl = memo(function VolumeControl({ volume, onVolumeChange }: VolumeControlProps) {
   const handleVolumeChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(event.target.value, 10);
-    onVolumeChange(newVolume);
+    if (!isNaN(newVolume) && newVolume >= 0 && newVolume <= 100) {
+      onVolumeChange(newVolume);
+    }
   }, [onVolumeChange]);
 
   return (

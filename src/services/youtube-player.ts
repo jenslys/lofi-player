@@ -44,7 +44,20 @@ interface YouTubePlayer {
   getPlayerState: () => number;
 }
 
-type PlayerEventCallback = (event: 'ready' | 'playing' | 'paused' | 'ended' | 'error', data?: any) => void;
+type PlayerEventType = 'ready' | 'playing' | 'paused' | 'ended' | 'error';
+
+type PlayerEventData = {
+  ready: undefined;
+  playing: undefined;
+  paused: undefined;
+  ended: undefined;
+  error: string;
+};
+
+type PlayerEventCallback = <T extends PlayerEventType>(
+  event: T,
+  data?: PlayerEventData[T]
+) => void;
 
 /**
  * Service for managing YouTube iframe player integration
@@ -68,7 +81,11 @@ class YouTubePlayerService {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+    if (firstScriptTag?.parentNode) {
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    } else {
+      document.head.appendChild(tag);
+    }
 
     window.onYouTubeIframeAPIReady = () => {
       this.isAPIReady = true;
@@ -106,14 +123,15 @@ class YouTubePlayerService {
           }
         },
         onError: (event) => {
-          const errorMessages = {
+          const errorMessages: Record<number, string> = {
             2: 'Invalid video ID or video unavailable',
             5: 'Video cannot be played in HTML5 player',
             100: 'Video not found or private',
             101: 'Video owner does not allow embedding',
             150: 'Video owner does not allow embedding'
           };
-          const errorMsg = errorMessages[event.data as keyof typeof errorMessages] || `Unknown error: ${event.data}`;
+          const errorCode = event.data;
+          const errorMsg = errorMessages[errorCode] ?? `Unknown error: ${errorCode}`;
           console.error('YouTube Player Error:', errorMsg);
           this.notifyCallbacks('error', errorMsg);
         },
@@ -137,7 +155,7 @@ class YouTubePlayerService {
     };
   }
 
-  private notifyCallbacks(event: 'ready' | 'playing' | 'paused' | 'ended' | 'error', data?: any): void {
+  private notifyCallbacks<T extends PlayerEventType>(event: T, data?: PlayerEventData[T]): void {
     this.callbacks.forEach(callback => callback(event, data));
   }
 
@@ -175,7 +193,7 @@ class YouTubePlayerService {
   }
 
   setVolume(volume: number): void {
-    if (this.player) {
+    if (this.player && typeof volume === 'number' && !isNaN(volume)) {
       this.player.setVolume(Math.max(0, Math.min(100, volume)));
     }
   }

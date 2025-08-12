@@ -1,27 +1,27 @@
 export interface Track {
-  id: string;
-  title: string;
-  channel: string;
-  youtubeId: string;
+  readonly id: string;
+  readonly title: string;
+  readonly channel: string;
+  readonly youtubeId: string;
 }
 
 export interface PlayerState {
-  currentTrack: Track | null;
-  isPlaying: boolean;
-  isLoading: boolean;
-  volume: number;
-  queue: Track[];
-  currentIndex: number;
-  error: string | null;
+  readonly currentTrack: Track | null;
+  readonly isPlaying: boolean;
+  readonly isLoading: boolean;
+  readonly volume: number;
+  readonly queue: readonly Track[];
+  readonly currentIndex: number;
+  readonly error: string | null;
 }
 
 export type PlayerAction =
-  | { type: 'SET_TRACKS'; payload: Track[] }
-  | { type: 'PLAY' }
-  | { type: 'PAUSE' }
-  | { type: 'NEXT_TRACK' }
-  | { type: 'PREVIOUS_TRACK' }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_VOLUME'; payload: number }
-  | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_CURRENT_TRACK'; payload: Track };
+  | { readonly type: 'SET_TRACKS'; readonly payload: readonly Track[] }
+  | { readonly type: 'PLAY' }
+  | { readonly type: 'PAUSE' }
+  | { readonly type: 'NEXT_TRACK' }
+  | { readonly type: 'PREVIOUS_TRACK' }
+  | { readonly type: 'SET_LOADING'; readonly payload: boolean }
+  | { readonly type: 'SET_VOLUME'; readonly payload: number }
+  | { readonly type: 'SET_ERROR'; readonly payload: string | null }
+  | { readonly type: 'SET_CURRENT_TRACK'; readonly payload: Track };
