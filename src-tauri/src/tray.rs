@@ -2,7 +2,7 @@ use tauri::{
     image::Image,
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder, TrayIconEvent},
-    AppHandle, Manager,
+    AppHandle,
 };
 use tauri_nspanel::ManagerExt;
 

@@ -8,33 +8,33 @@ export const lofiTracks = [
     youtubeId: 'jfKfPfyJRdk'
   },
   {
-    id: 'lofi-girl-sleep',
-    title: 'lofi hip hop radio 😴 - beats to sleep/chill to',
-    channel: 'Lofi Girl',
-    youtubeId: 'rUxyKA_-grg'
+    id: 'steezyasfuck',
+    title: 'Steezyasfuck',
+    channel: 'Steezyasfuck',
+    youtubeId: 'UI5NKkW8acM'
   },
   {
-    id: 'chillhop-raccoon',
-    title: 'jazzy hip hop 🎷 - smooth beats to relax/study to',
-    channel: 'Chillhop Music',
-    youtubeId: '5yx6BWlEVcY'
+    id: 'healing-me-1',
+    title: 'Healing me',
+    channel: 'Healing me',
+    youtubeId: 'Rs0EOzsJPU0'
   },
   {
-    id: 'college-music',
-    title: 'chill lofi hip hop radio 📻 24/7',
-    channel: 'College Music',
-    youtubeId: 'f02mOEt11OQ'
+    id: 'healing-me-2',
+    title: 'Healing me',
+    channel: 'Healing me',
+    youtubeId: 'bRnTGwCbr3E'
   },
   {
-    id: 'chilled-cow-backup',
-    title: 'peaceful piano 🎹 - calming music',
-    channel: 'Lofi Girl',
-    youtubeId: 'DWcJFNfaw9c'
+    id: 'relaxation-ambient',
+    title: 'Relaxation ambient music',
+    channel: 'Relaxation ambient music',
+    youtubeId: 'tNkZsRW7h2c'
   },
   {
-    id: 'simple-lofi',
-    title: 'lofi hip hop mix 🎧 - chill study beats',
-    channel: 'Simple Lofi',
-    youtubeId: '36YnV9STBqc'
+    id: 'retro-rhythm',
+    title: 'Retro rhythm',
+    channel: 'Retro rhythm',
+    youtubeId: 'TfWotiyXGfI'
   }
 ] as const satisfies readonly Track[];
