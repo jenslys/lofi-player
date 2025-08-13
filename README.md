@@ -1,11 +1,12 @@
 <div align="center">
   <img src="src-tauri/icons/icon.png" alt="Lofi Player" width="128" height="128">
-  
-  # Lofi Player
-  
-  **A minimalist desktop music player for lofi hip hop beats** • 26.6 kB bundle size
-  
-  *Perfect for studying, working, and relaxing with continuous lofi music streaming*
+
+# Lofi Player
+
+**A minimalist desktop music player for lofi hip hop beats** • 26.6 kB bundle size
+
+_Perfect for studying, working, and relaxing with continuous lofi music streaming_
+
 </div>
 
 ---
@@ -14,7 +15,7 @@
 
 Lofi Player is a lightweight desktop application built with **Tauri** and **React** that streams high-quality lofi hip hop music directly from YouTube. Designed for productivity and focus, it provides a distraction-free music experience perfect for studying, coding, working, or relaxing.
 
-https://github.com/user-attachments/assets/2e3f86fb-eceb-46e9-b626-761362f84220
+https://github.com/user-attachments/assets/4bb330f1-6af5-4411-afb5-4263697efb1f
 
 ## ✨ Features
 
@@ -26,6 +27,7 @@ https://github.com/user-attachments/assets/2e3f86fb-eceb-46e9-b626-761362f84220
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - [Bun](https://bun.sh/) or [Node.js](https://nodejs.org/)
 - [Rust](https://rustup.rs/) (for Tauri)
 
@@ -33,7 +35,7 @@ https://github.com/user-attachments/assets/2e3f86fb-eceb-46e9-b626-761362f84220
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/lofi-player.git
+git clone https://github.com/jenslys/lofi-player.git
 cd lofi-player
 
 # Install dependencies
