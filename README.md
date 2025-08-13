@@ -14,6 +14,8 @@
 
 Lofi Player is a lightweight desktop application built with **Tauri** and **React** that streams high-quality lofi hip hop music directly from YouTube. Designed for productivity and focus, it provides a distraction-free music experience perfect for studying, coding, working, or relaxing.
 
+![Lofi Player Preview](https://media.cleanshot.cloud/media/19237/yR4NaD5keZVU2TE6jRHJSKJbPhT1sFE26VxG2Dkg.gif?Expires=1755135117&Signature=kofsW0XMt7Cdsnw6nSa3x87N8HfHZ2OKGaw8fMZWPr2P9r2ox-fyjBtxBalwqAUkS2FA8TjCBiGN05eroq6gwBm1-vUsLPyxgjaKRzUWU4LfATHGzcQUDE7AbrxNblF98ca415W0GgLSOLxJxucqrME5XTIOCCzXzLwwd7KbO7y8GtaIDpH3dGZ-6VUy5A-dk9OdhJYRc3g57yzDphpU3l2VSkChMt2h-fsPXPRelk6g11WGhwxxCvzB0sgD25H7X3U-k22es7gfCBxn1VryL1wZcdljeE6fNjvOrjld6Io15qqgHUdXV8u60~zLKaZIIG9-852rBL1rO63N0mFhjg__&Key-Pair-Id=K269JMAT9ZF4GZ)
+
 ## ✨ Features
 
 - 🎧 **Continuous lofi hip hop streaming** from curated YouTube playlists
