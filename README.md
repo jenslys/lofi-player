@@ -3,22 +3,66 @@
   
   # Lofi Player
   
-  Simple lofi music player. 26.6 kB bundle size.
+  **A minimalist desktop music player for lofi hip hop beats** • 26.6 kB bundle size
+  
+  *Perfect for studying, working, and relaxing with continuous lofi music streaming*
 </div>
 
-## Run
+---
+
+## 🎵 About
+
+Lofi Player is a lightweight desktop application built with **Tauri** and **React** that streams high-quality lofi hip hop music directly from YouTube. Designed for productivity and focus, it provides a distraction-free music experience perfect for studying, coding, working, or relaxing.
+
+## ✨ Features
+
+- 🎧 **Continuous lofi hip hop streaming** from curated YouTube playlists
+- 💾 **Smart memory** - remembers your volume and current track
+- 🎨 **Minimal design** - clean, distraction-free interface
+- 🎛️ **System tray integration** - control playback from your menu bar
+
+## 🚀 Quick Start
+
+### Prerequisites
+- [Bun](https://bun.sh/) or [Node.js](https://nodejs.org/)
+- [Rust](https://rustup.rs/) (for Tauri)
+
+### Installation & Development
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/lofi-player.git
+cd lofi-player
+
+# Install dependencies
 bun install
+
+# Start development server
 bun run dev
 ```
 
-## Features
+### Building for Production
 
-- Streams lofi hip hop from YouTube
-- Remembers your volume and track
-- Clean minimal design
+```bash
+# Build the desktop app
+bun run tauri build
+```
 
-## License
+## 🎯 Perfect For
 
-MIT
+- **Students** studying for exams or doing homework
+- **Developers** coding and programming
+- **Writers** and content creators
+- **Remote workers** focusing from home
+- **Anyone** who enjoys ambient music for relaxation
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React, TypeScript, CSS
+- **Backend**: Tauri (Rust)
+- **Audio**: YouTube Player API
+- **Build**: Vite, Bun
+
+## 📝 License
+
+MIT - Feel free to use this project for personal or commercial purposes.
