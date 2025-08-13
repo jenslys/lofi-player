@@ -1,6 +1,10 @@
-# Lofi Player
-
-Simple lofi music player. 26.6 kB bundle size.
+<div align="center">
+  <img src="src-tauri/icons/icon.png" alt="Lofi Player" width="128" height="128">
+  
+  # Lofi Player
+  
+  Simple lofi music player. 26.6 kB bundle size.
+</div>
 
 ## Run
 
