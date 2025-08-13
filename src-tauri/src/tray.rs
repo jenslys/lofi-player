@@ -9,7 +9,7 @@ use tauri_nspanel::ManagerExt;
 use crate::fns::position_menubar_panel;
 
 pub fn create(app_handle: &AppHandle) -> tauri::Result<TrayIcon> {
-    let icon = Image::from_bytes(include_bytes!("../icons/tray.png"))?;
+    let icon = Image::from_bytes(include_bytes!("../icons/cup-outline.png"))?;
 
     // Create context menu with Quit option
     let quit_item = MenuItem::with_id(app_handle, "quit", "Quit", true, None::<&str>)?;
@@ -46,4 +46,19 @@ pub fn create(app_handle: &AppHandle) -> tauri::Result<TrayIcon> {
             }
         })
         .build(app_handle)
+}
+
+#[tauri::command]
+pub fn update_tray_icon(app_handle: AppHandle, is_playing: bool) -> tauri::Result<()> {
+    let tray = app_handle.tray_by_id("tray").unwrap();
+    
+    let icon = if is_playing {
+        Image::from_bytes(include_bytes!("../icons/cup-bold.png"))?
+    } else {
+        Image::from_bytes(include_bytes!("../icons/cup-outline.png"))?
+    };
+    
+    tray.set_icon(Some(icon))?;
+    
+    Ok(())
 }

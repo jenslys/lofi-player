@@ -1,4 +1,5 @@
 import { useReducer, useEffect, useCallback } from 'preact/hooks';
+import { invoke } from '@tauri-apps/api/core';
 import { PlayerState, PlayerAction } from '../types/music';
 import { lofiTracks } from '../data/tracks';
 import { fisherYatesShuffle } from '../utils/shuffle';
@@ -154,8 +155,13 @@ export function useAudioPlayer() {
     }
   }, [state.currentTrack]);
 
+  useEffect(() => {
+    invoke('update_tray_icon', { isPlaying: state.isPlaying }).catch(console.error);
+  }, [state.isPlaying]);
+
   const play = useCallback(() => {
     if (state.currentTrack) {
+      dispatch({ type: 'SET_LOADING', payload: true });
       youtubePlayerService.play();
     }
   }, [state.currentTrack]);
