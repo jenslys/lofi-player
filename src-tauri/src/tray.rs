@@ -30,7 +30,12 @@ pub fn create(app_handle: &AppHandle) -> tauri::Result<TrayIcon> {
             let app_handle = tray.app_handle();
 
             // Handle tray icon events (left-click)
-            if let TrayIconEvent::Click { button, button_state, .. } = event {
+            if let TrayIconEvent::Click {
+                button,
+                button_state,
+                ..
+            } = event
+            {
                 if button == MouseButton::Left && button_state == MouseButtonState::Up {
                     let panel = app_handle.get_webview_panel("main").unwrap();
 
@@ -51,14 +56,14 @@ pub fn create(app_handle: &AppHandle) -> tauri::Result<TrayIcon> {
 #[tauri::command]
 pub fn update_tray_icon(app_handle: AppHandle, is_playing: bool) -> tauri::Result<()> {
     let tray = app_handle.tray_by_id("tray").unwrap();
-    
+
     let icon = if is_playing {
         Image::from_bytes(include_bytes!("../icons/cup-bold.png"))?
     } else {
         Image::from_bytes(include_bytes!("../icons/cup-outline.png"))?
     };
-    
+
     tray.set_icon(Some(icon))?;
-    
+
     Ok(())
 }

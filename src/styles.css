@@ -5,7 +5,8 @@
   font-weight: 400;
 
   color: #fff;
-  background-color: #1c1c1e;
+  background-color: transparent;
+  color-scheme: dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,6 +21,9 @@ body {
   margin: 0;
   overflow: hidden;
   box-sizing: border-box;
+  background: transparent;
+  height: 100%;
+  width: 100%;
 }
 
 *:focus:not(:focus-visible) {
@@ -32,10 +36,7 @@ body {
 }
 
 body {
-  height: 100vh;
-  width: 100vw;
-  border-radius: 12px;
-  overflow: hidden;
+  border-radius: 18px;
 }
 
 .container {
@@ -45,6 +46,12 @@ body {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  height: 100vh;
+  height: 100%;
   outline: none;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  background: transparent;
 }

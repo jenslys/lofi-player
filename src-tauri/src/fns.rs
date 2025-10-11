@@ -1,21 +1,38 @@
 #![allow(deprecated)]
 
-use std::ffi::CString;
+use std::{cell::RefCell, ffi::CString};
 
 use tauri::{AppHandle, Emitter, Listener, Manager, WebviewWindow};
 use tauri_nspanel::{
     block::ConcreteBlock,
     cocoa::{
-        appkit::{NSMainMenuWindowLevel, NSView, NSWindow, NSWindowCollectionBehavior},
+        appkit::{
+            NSMainMenuWindowLevel, NSView, NSViewHeightSizable, NSViewWidthSizable,
+            NSVisualEffectBlendingMode, NSVisualEffectMaterial, NSVisualEffectState, NSWindow,
+            NSWindowCollectionBehavior, NSWindowOrderingMode,
+        },
         base::{id, nil},
         foundation::{NSPoint, NSRect},
     },
-    objc::{class, msg_send, runtime::NO, sel, sel_impl},
+    objc::{
+        class, msg_send,
+        rc::StrongPtr,
+        runtime::{Class, BOOL, NO, YES},
+        sel, sel_impl,
+    },
     panel_delegate, ManagerExt, WebviewWindowExt,
 };
 
 #[allow(non_upper_case_globals)]
 const NSWindowStyleMaskNonActivatingPanel: i32 = 1 << 7;
+
+const LIQUID_CORNER_RADIUS: f64 = 18.0;
+const GLASS_TINT_ALPHA: f64 = 0.18;
+
+thread_local! {
+    static GLASS_VIEW: RefCell<Option<StrongPtr>> = RefCell::new(None);
+    static BACKGROUND_VIEW: RefCell<Option<StrongPtr>> = RefCell::new(None);
+}
 
 pub fn swizzle_to_menubar_panel(app_handle: &tauri::AppHandle) {
     let panel_delegate = panel_delegate!(SpotlightPanelDelegate {
@@ -84,7 +101,8 @@ pub fn setup_menubar_panel_listeners(app_handle: &AppHandle) {
 pub fn update_menubar_appearance(app_handle: &AppHandle) {
     let window = app_handle.get_webview_window("main").unwrap();
 
-    set_corner_radius(&window, 13.0);
+    apply_liquid_glass(&window, LIQUID_CORNER_RADIUS);
+    set_corner_radius(&window, LIQUID_CORNER_RADIUS);
 }
 
 pub fn set_corner_radius(window: &WebviewWindow, radius: f64) {
@@ -93,11 +111,127 @@ pub fn set_corner_radius(window: &WebviewWindow, radius: f64) {
     unsafe {
         let view: id = win.contentView();
 
-        view.wantsLayer();
+        view.setWantsLayer(YES);
 
         let layer: id = view.layer();
 
         let _: () = msg_send![layer, setCornerRadius: radius];
+        let _: () = msg_send![layer, setMasksToBounds: YES];
+        let clear: id = msg_send![class!(NSColor), clearColor];
+        let clear_color: id = msg_send![clear, CGColor];
+        let _: () = msg_send![layer, setBackgroundColor: clear_color];
+    }
+}
+
+fn apply_liquid_glass(window: &WebviewWindow, corner_radius: f64) {
+    unsafe {
+        let Ok(raw_handle) = window.ns_window() else {
+            return;
+        };
+
+        let ns_window: id = raw_handle as _;
+        let container: id = ns_window.contentView();
+        let bounds: NSRect = msg_send![container, bounds];
+        let mask = NSViewWidthSizable | NSViewHeightSizable;
+
+        BACKGROUND_VIEW.with(|slot| {
+            if let Some(existing) = slot.borrow_mut().take() {
+                let view: id = *existing;
+                let _: () = msg_send![view, removeFromSuperview];
+            }
+        });
+
+        GLASS_VIEW.with(|slot| {
+            if let Some(existing) = slot.borrow_mut().take() {
+                let view: id = *existing;
+                let _: () = msg_send![view, removeFromSuperview];
+            }
+        });
+
+        if let Some(glass_cls) = Class::get("NSGlassEffectView") {
+            let glass_alloc: id = msg_send![glass_cls, alloc];
+            let glass: id = msg_send![glass_alloc, initWithFrame: bounds];
+
+            let _: () = msg_send![glass, setAutoresizingMask: mask];
+            let _: () = msg_send![glass, setWantsLayer: YES];
+            let glass_layer: id = msg_send![glass, layer];
+            let _: () = msg_send![glass_layer, setCornerRadius: corner_radius];
+            let _: () = msg_send![glass_layer, setMasksToBounds: YES];
+
+            let background_alloc: id = msg_send![class!(NSView), alloc];
+            let background_view: id = msg_send![background_alloc, initWithFrame: bounds];
+            let _: () = msg_send![background_view, setAutoresizingMask: mask];
+            let _: () = msg_send![background_view, setWantsLayer: YES];
+            let background_layer: id = msg_send![background_view, layer];
+            let palette: id = msg_send![class!(NSColor), windowBackgroundColor];
+            let palette: id = msg_send![palette, colorWithAlphaComponent: 0.72];
+            let palette_color: id = msg_send![palette, CGColor];
+            let _: () = msg_send![background_layer, setBackgroundColor: palette_color];
+            let _: () = msg_send![background_layer, setCornerRadius: corner_radius];
+            let _: () = msg_send![background_layer, setMasksToBounds: YES];
+
+            let _: () = msg_send![
+                container,
+                addSubview: background_view
+                positioned: NSWindowOrderingMode::NSWindowBelow
+                relativeTo: nil
+            ];
+
+            let tint_selector = sel!(setTintColor:);
+            let supports_tint: BOOL = msg_send![glass, respondsToSelector: tint_selector];
+            if supports_tint == YES {
+                let accent: id = msg_send![class!(NSColor), controlAccentColor];
+                let accent: id = msg_send![accent, colorWithAlphaComponent: GLASS_TINT_ALPHA];
+                let _: () = msg_send![glass, setTintColor: accent];
+            }
+
+            let _: () = msg_send![
+                container,
+                addSubview: glass
+                positioned: NSWindowOrderingMode::NSWindowAbove
+                relativeTo: background_view
+            ];
+
+            BACKGROUND_VIEW.with(|slot| {
+                *slot.borrow_mut() = Some(StrongPtr::new(background_view as _));
+            });
+
+            GLASS_VIEW.with(|slot| {
+                *slot.borrow_mut() = Some(StrongPtr::new(glass as _));
+            });
+        } else {
+            let visual_alloc: id = msg_send![class!(NSVisualEffectView), alloc];
+            let glass: id = msg_send![visual_alloc, initWithFrame: bounds];
+            let _: () = msg_send![glass, setMaterial: NSVisualEffectMaterial::WindowBackground];
+            let _: () = msg_send![glass, setBlendingMode: NSVisualEffectBlendingMode::BehindWindow];
+            let _: () = msg_send![glass, setState: NSVisualEffectState::Active];
+            let _: () = msg_send![glass, setAutoresizingMask: mask];
+            let _: () = msg_send![glass, setWantsLayer: YES];
+            let layer: id = msg_send![glass, layer];
+            let _: () = msg_send![layer, setCornerRadius: corner_radius];
+            let _: () = msg_send![layer, setMasksToBounds: YES];
+            let _: () = msg_send![
+                container,
+                addSubview: glass
+                positioned: NSWindowOrderingMode::NSWindowBelow
+                relativeTo: nil
+            ];
+
+            GLASS_VIEW.with(|slot| {
+                *slot.borrow_mut() = Some(StrongPtr::new(glass as _));
+            });
+            BACKGROUND_VIEW.with(|slot| {
+                slot.borrow_mut().take();
+            });
+        }
+
+        let _: () = msg_send![container, setWantsLayer: YES];
+        let container_layer: id = msg_send![container, layer];
+        let _: () = msg_send![container_layer, setCornerRadius: corner_radius];
+        let _: () = msg_send![container_layer, setMasksToBounds: YES];
+        let clear: id = msg_send![class!(NSColor), clearColor];
+        let clear_color: id = msg_send![clear, CGColor];
+        let _: () = msg_send![container_layer, setBackgroundColor: clear_color];
     }
 }
 
