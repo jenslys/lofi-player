@@ -1,30 +1,21 @@
-<div align="center">
-  <img src="src-tauri/icons/icon.png" alt="Lofi Player" width="128" height="128">
+<p align="center">
+  <img src="src-tauri/icons/icon.png" alt="Lofi Player icon" width="128" height="128">
+</p>
 
 # Lofi Player
 
-**A minimalist desktop music player for lofi hip hop beats** • 26.6 kB bundle size
-
-_Perfect for studying, working, and relaxing with continuous lofi music streaming_
-
-</div>
-
----
-
-## 🎵 About
-
-Lofi Player is a lightweight desktop application built with **Tauri** and **React** that streams high-quality lofi hip hop music directly from YouTube. Designed for productivity and focus, it provides a distraction-free music experience perfect for studying, coding, working, or relaxing.
+Lofi Player is a minimalist desktop music player built with **Tauri** and **React**. It streams curated lofi hip hop playlists from YouTube in a lightweight desktop shell.
 
 https://github.com/user-attachments/assets/4bb330f1-6af5-4411-afb5-4263697efb1f
 
-## ✨ Features
+## Features
 
-- 🎧 **Continuous lofi hip hop streaming** from curated YouTube playlists
-- 💾 **Smart memory** - remembers your volume and current track
-- 🎨 **Minimal design** - clean, distraction-free interface
-- 🎛️ **System tray integration** - control playback from your menu bar
+- Continuous streaming from curated YouTube playlists
+- Remembers volume and resumes the most recent track
+- Minimal, distraction-free interface
+- Menu bar controls through the system tray
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -52,21 +43,6 @@ bun run dev
 bun run tauri build
 ```
 
-## 🎯 Perfect For
+## License
 
-- **Students** studying for exams or doing homework
-- **Developers** coding and programming
-- **Writers** and content creators
-- **Remote workers** focusing from home
-- **Anyone** who enjoys ambient music for relaxation
-
-## 🛠️ Tech Stack
-
-- **Frontend**: React, TypeScript, CSS
-- **Backend**: Tauri (Rust)
-- **Audio**: YouTube Player API
-- **Build**: Vite, Bun
-
-## 📝 License
-
-MIT - Feel free to use this project for personal or commercial purposes.
+MIT
