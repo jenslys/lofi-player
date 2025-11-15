@@ -34,7 +34,7 @@
         "resizable": false,
         "title": "Lofi Player",
         "width": 260,
-        "height": 160,
+        "height": 200,
         "decorations": false,
         "transparent": true,
         "visible": false

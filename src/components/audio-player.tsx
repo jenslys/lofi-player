@@ -27,10 +27,10 @@ export function AudioPlayer() {
   }, []);
 
   return (
-    <div className="audio-player">
-      <div id="youtube-player" style={{ display: 'none' }}></div>
-      
-      <div className="player-content">
+    <section className="audio-player" aria-label="Flow player">
+      <div id="youtube-player" style={{ display: 'none' }} aria-hidden="true"></div>
+
+      <div className="player-inline">
         <PlayerControls
           isPlaying={isPlaying}
           isLoading={isLoading}
@@ -38,18 +38,18 @@ export function AudioPlayer() {
           onNext={nextTrack}
           onPrevious={previousTrack}
         />
-        
-        <VolumeControl
-          volume={volume}
-          onVolumeChange={setVolume}
-        />
-        
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+
+        <div className="player-bottom">
+          <VolumeControl
+            volume={volume}
+            onVolumeChange={setVolume}
+          />
+        </div>
+
+        <span className="player-status" role="status" aria-live="polite">
+          {error ? 'switching stream' : ''}
+        </span>
       </div>
-    </div>
+    </section>
   );
 }

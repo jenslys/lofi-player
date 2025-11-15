@@ -55,7 +55,6 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
         currentIndex: nextIndex,
         currentTrack: state.queue[nextIndex] || null,
         isLoading: true,
-        error: null,
       };
 
     case 'PREVIOUS_TRACK':
@@ -65,7 +64,6 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
         currentIndex: prevIndex,
         currentTrack: state.queue[prevIndex] || null,
         isLoading: true,
-        error: null,
       };
 
     case 'SET_LOADING':
@@ -129,15 +127,21 @@ export function useAudioPlayer() {
           break;
         case 'error':
           console.error(`YouTube player error: ${data}`);
-          setTimeout(() => {
-            dispatch({ type: 'NEXT_TRACK' });
-          }, 1000);
+          dispatch({
+            type: 'SET_ERROR',
+            payload: data ?? 'We could not reach that stream just now.',
+          });
+          if (state.queue.length > 0) {
+            setTimeout(() => {
+              dispatch({ type: 'NEXT_TRACK' });
+            }, 600);
+          }
           break;
       }
     });
 
     return unsubscribe;
-  }, [state.volume]);
+  }, [state.volume, state.queue.length]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -161,6 +165,7 @@ export function useAudioPlayer() {
 
   const play = useCallback(() => {
     if (state.currentTrack) {
+      dispatch({ type: 'SET_ERROR', payload: null });
       dispatch({ type: 'SET_LOADING', payload: true });
       youtubePlayerService.play();
     }
