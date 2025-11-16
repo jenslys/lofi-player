@@ -49,6 +49,9 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
       };
 
     case 'NEXT_TRACK':
+      if (state.queue.length === 0) {
+        return state;
+      }
       const nextIndex = (state.currentIndex + 1) % state.queue.length;
       return {
         ...state,
@@ -58,6 +61,9 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
       };
 
     case 'PREVIOUS_TRACK':
+      if (state.queue.length === 0) {
+        return state;
+      }
       const prevIndex = state.currentIndex === 0 ? state.queue.length - 1 : state.currentIndex - 1;
       return {
         ...state,
@@ -83,7 +89,6 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
         ...state,
         error: action.payload,
         isLoading: false,
-        isPlaying: false,
       };
 
     case 'SET_CURRENT_TRACK':
@@ -134,9 +139,7 @@ export function useAudioPlayer() {
             payload: data ?? 'We could not reach that stream just now.',
           });
           if (state.queue.length > 0) {
-            setTimeout(() => {
-              dispatch({ type: 'NEXT_TRACK' });
-            }, 600);
+            dispatch({ type: 'NEXT_TRACK' });
           }
           break;
       }

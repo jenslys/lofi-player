@@ -26,6 +26,8 @@ interface YouTubePlayerOptions {
     modestbranding: number;
     rel: number;
     showinfo: number;
+    origin?: string;
+    enablejsapi?: number;
   };
   events: {
     onReady: (event: { target: YouTubePlayer }) => void;
@@ -107,6 +109,8 @@ class YouTubePlayerService {
         modestbranding: 1,
         rel: 0,
         showinfo: 0,
+        origin: this.getPlayerOrigin(),
+        enablejsapi: 1,
       },
       events: {
         onReady: () => {
@@ -203,6 +207,14 @@ class YouTubePlayerService {
       this.player = null;
     }
     this.callbacks = [];
+  }
+
+  private getPlayerOrigin(): string {
+    const rawOrigin = window.location.origin;
+    if (rawOrigin && /^https?:\/\//.test(rawOrigin)) {
+      return rawOrigin;
+    }
+    return 'https://localhost';
   }
 }
 

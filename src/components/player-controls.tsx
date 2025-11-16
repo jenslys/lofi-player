@@ -37,7 +37,6 @@ export function PlayerControls({ isPlaying, isLoading, onPlayPause, onNext, onPr
       <button
         className="control-button previous-button"
         onClick={onPrevious}
-        disabled={isLoading}
         tabIndex={-1}
       >
         {PREVIOUS_ICON}
@@ -61,7 +60,6 @@ export function PlayerControls({ isPlaying, isLoading, onPlayPause, onNext, onPr
       <button
         className="control-button next-button"
         onClick={onNext}
-        disabled={isLoading}
         tabIndex={-1}
       >
         {NEXT_ICON}
