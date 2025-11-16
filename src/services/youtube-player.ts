@@ -210,11 +210,7 @@ class YouTubePlayerService {
   }
 
   private getPlayerOrigin(): string {
-    const rawOrigin = window.location.origin;
-    if (rawOrigin && /^https?:\/\//.test(rawOrigin)) {
-      return rawOrigin;
-    }
-    return 'https://localhost';
+    return window.location.origin || 'https://localhost';
   }
 }
 

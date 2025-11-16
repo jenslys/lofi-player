@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useCallback, useState } from 'preact/hooks';
+import { useReducer, useEffect, useCallback, useState, useRef } from 'preact/hooks';
 import { invoke } from '@tauri-apps/api/core';
 import { PlayerState, PlayerAction } from '../types/music';
 import { lofiTracks } from '../data/tracks';
@@ -109,6 +109,7 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
 export function useAudioPlayer() {
   const [state, dispatch] = useReducer(playerReducer, initialState);
   const [playerReady, setPlayerReady] = useState(false);
+  const loadTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     dispatch({ type: 'SET_TRACKS', payload: lofiTracks });
@@ -163,6 +164,33 @@ export function useAudioPlayer() {
       youtubePlayerService.loadVideo(state.currentTrack.youtubeId);
     }
   }, [playerReady, state.currentTrack]);
+
+  useEffect(() => {
+    if (!state.isLoading || !state.currentTrack) {
+      if (loadTimeoutRef.current) {
+        clearTimeout(loadTimeoutRef.current);
+        loadTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    if (loadTimeoutRef.current) {
+      clearTimeout(loadTimeoutRef.current);
+    }
+
+    loadTimeoutRef.current = window.setTimeout(() => {
+      if (state.isLoading) {
+        dispatch({ type: 'NEXT_TRACK' });
+      }
+    }, 7000);
+
+    return () => {
+      if (loadTimeoutRef.current) {
+        clearTimeout(loadTimeoutRef.current);
+        loadTimeoutRef.current = null;
+      }
+    };
+  }, [state.isLoading, state.currentTrack]);
 
   useEffect(() => {
     invoke('update_tray_icon', { isPlaying: state.isPlaying }).catch(console.error);
