@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useCallback } from 'preact/hooks';
+import { useReducer, useEffect, useCallback, useState } from 'preact/hooks';
 import { invoke } from '@tauri-apps/api/core';
 import { PlayerState, PlayerAction } from '../types/music';
 import { lofiTracks } from '../data/tracks';
@@ -103,6 +103,7 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
  */
 export function useAudioPlayer() {
   const [state, dispatch] = useReducer(playerReducer, initialState);
+  const [playerReady, setPlayerReady] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'SET_TRACKS', payload: lofiTracks });
@@ -112,6 +113,7 @@ export function useAudioPlayer() {
     const unsubscribe = youtubePlayerService.onPlayerEvent((event, data) => {
       switch (event) {
         case 'ready':
+          setPlayerReady(true);
           youtubePlayerService.setVolume(state.volume);
           dispatch({ type: 'SET_LOADING', payload: false });
           break;
@@ -153,11 +155,11 @@ export function useAudioPlayer() {
   }, [state.currentIndex, state.volume]);
 
   useEffect(() => {
-    if (state.currentTrack && youtubePlayerService.isReady()) {
+    if (playerReady && state.currentTrack) {
       dispatch({ type: 'SET_LOADING', payload: true });
       youtubePlayerService.loadVideo(state.currentTrack.youtubeId);
     }
-  }, [state.currentTrack]);
+  }, [playerReady, state.currentTrack]);
 
   useEffect(() => {
     invoke('update_tray_icon', { isPlaying: state.isPlaying }).catch(console.error);
